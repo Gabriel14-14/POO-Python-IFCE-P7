@@ -1,1 +1,97 @@
 
+Módulo notafiscal -
+Classe NotaFiscal - 
+        Atributos :
+            id        - informado.
+            codigo    - informado.
+            data      - informado.
+            cliente   - informado.
+            items     - informado
+            valornota - calculado. 
+import datetime
+from cliente        import Cliente
+from produto        import Produto
+from itemnotafiscal import ItemNotaFiscal
+
+
+class NotaFiscal():         
+    def __init__(self, Id, codigo, cliente):
+        self._Id = Id
+        self._codigo=codigo
+        self._cliente=cliente 
+        self._data=datetime.datetime.now()   
+        self._itens=[]
+        self._valorNota=0.0        
+
+    def getItens(self):
+        return self._itens
+
+    def setCliente(self, cliente):
+        if isinstance(cliente, Cliente):
+            self._cliente=cliente    
+            
+    def adicionarItem(self, item):
+        if isinstance(item, ItemNotaFiscal):
+            self._itens.append(item)
+            
+        
+    def calcularNotaFiscal(self):
+        valor = 0.0
+        for item in self._itens:
+            valor += item._valorItem
+        self._valorNota = valor
+        return self._valorNota
+
+        
+        
+    def imprimirNotaFiscal(self):
+
+print('-' * 82)
+print('Nota fiscal',' ' * 57 ,self._data.day,'/', self._data.month,'/', self._data.year)
+print('Cliente: ', self._cliente._codigo,'  ', 'Nome:', self._cliente._nome)
+print('CPF / CNPJ: ', self._cliente._cnpjcpf)
+print('-' * 82)
+
+print('ITENS')
+print('-' * 82)
+print('Seq', '  ', 'Descrição', '               ' , '  qtd', '    ' , 'Valor Unit', '    ' , 'Preço')
+print('---' , '  ', '-' * 22, '  ' , '      ---', '    ' , '-' * 10, '    ' , '-----')
+        
+ for item in self._itens:
+ print(item._sequencial, ' ' * 4, item._descricao, ' ' * 13, item._quantidade, ' ' * 7,  item._valorUnitario, ' ' * 8, item._valorItem)
+        
+        print('_' * 82)
+        print('Valor total: ', self._valorNota)
+
+from produto        import Produto
+from cliente        import Cliente
+from notafiscal     import NotaFiscal
+from itemnotafiscal import ItemNotaFiscal
+from tipocliente    import TipoCliente
+
+
+def main():
+    
+    cli=Cliente(1, "José Simão da Silva", 1234, "200.100.345-34", 1)
+    
+    p1=Produto(1,100,"Arroz Agulha      ",5.5) 
+    it1=ItemNotaFiscal(1, 1, 10, p1)
+    
+    p2=Produto(2,200,"Feijao Mulatinho  ",8.5) 
+    it2=ItemNotaFiscal(2, 2,10,p2)
+    
+    p3=Produto(3,300,"Macarrao Fortaleza", 4.5) 
+    it3=ItemNotaFiscal(3, 3, 10, p3)
+    
+    nf = NotaFiscal(1,100,cli)
+    nf.adicionarItem(it1)
+    nf.adicionarItem(it2)
+    nf.adicionarItem(it3)
+    nf.calcularNotaFiscal()
+    
+    
+    nf.imprimirNotaFiscal()
+
+
+if __name__ == '__main__':
+    main()
